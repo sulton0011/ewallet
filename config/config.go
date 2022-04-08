@@ -11,17 +11,17 @@ type Config struct {
 	PostgresPort int
 	PostgresUser string
 	PostgresPass string
-	PostgresDB string
-	RedisHost string
-	RedisPort int
+	PostgresDB   string
+	RedisHost    string
+	RedisPort    int
 	Port         string
-	SecretKey []byte
+	SecretKey    []byte
 }
 
 func LoadCfg() Config {
 
 	var cfg = Config{}
-	
+
 	cfg.PostgresHost = cast.ToString(getOrReturnDefault("POSTGRES_HOST", "localhost"))
 	cfg.PostgresPort = cast.ToInt(getOrReturnDefault("POSTGRES_PORT", 5432))
 	cfg.PostgresUser = cast.ToString(getOrReturnDefault("POSTGRES_USER", "mac"))
@@ -29,7 +29,7 @@ func LoadCfg() Config {
 	cfg.PostgresDB = cast.ToString(getOrReturnDefault("POSTGRES_DATABASE", "ewallet"))
 	cfg.RedisHost = cast.ToString(getOrReturnDefault("REDIS_HOST", "localhost"))
 	cfg.RedisPort = cast.ToInt(getOrReturnDefault("REDIS_PORT", 6379))
-	
+
 	return cfg
 }
 

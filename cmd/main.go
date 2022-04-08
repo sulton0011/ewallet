@@ -2,6 +2,7 @@ package main
 
 import (
 	"ewallet/config"
+	"ewallet/storage"
 	"fmt"
 
 	"github.com/jmoiron/sqlx"
@@ -17,8 +18,11 @@ func main() {
 		cfg.PostgresDB,
 	)
 
-	psql, err := sqlx.Connect("postgres", psqlCred)
+	connPsql, err := sqlx.Connect("postgres", psqlCred)
 	if err != nil {
 		panic(err)
 	}
+
+	repo := storage.NewStorage(connPsql).Storage()
+
 }
