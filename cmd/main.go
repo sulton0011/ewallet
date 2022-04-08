@@ -1,6 +1,7 @@
 package main
 
 import (
+	"ewallet/api"
 	"ewallet/config"
 	"ewallet/storage"
 	"fmt"
@@ -25,4 +26,12 @@ func main() {
 
 	repo := storage.NewStorage(connPsql).Storage()
 
+	server := api.New(api.Options{
+		Cfg: cfg,
+		Repo: repo,
+	})
+
+	if err = server.Run(cfg.Port); err != nil {
+		panic(err)
+	}
 }

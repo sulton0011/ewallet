@@ -22,6 +22,7 @@ func LoadCfg() Config {
 
 	var cfg = Config{}
 
+	cfg.Port = cast.ToString(getOrReturnDefault("PORT", ":9099"))
 	cfg.PostgresHost = cast.ToString(getOrReturnDefault("POSTGRES_HOST", "localhost"))
 	cfg.PostgresPort = cast.ToInt(getOrReturnDefault("POSTGRES_PORT", 5432))
 	cfg.PostgresUser = cast.ToString(getOrReturnDefault("POSTGRES_USER", "mac"))
