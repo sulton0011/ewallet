@@ -17,5 +17,6 @@ type Options struct {
 func New(options Options) {
 	handler := handlers.NewHandler(options.Cfg, options.Repo, options.Auth)
 
-	http.HandleFunc("/user", handler.AddUser)
+	http.HandleFunc("/user/new", handler.AddUser)
+	http.HandleFunc("/wallet/new", handler.NewWallet)
 }

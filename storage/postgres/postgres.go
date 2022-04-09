@@ -29,7 +29,7 @@ func (d Database) AddUser(u models.User) (*models.User, error) {
 	VALUES ( $1, $2, $3, $4, $5, $6, $7 )`
 
 	var (
-		now = time.Now().Format(time.RFC822)
+		now = time.Now().UTC().Format("2006-01-02 15:04:05")
 		err error
 	)
 
@@ -51,7 +51,6 @@ func (d Database) AddUser(u models.User) (*models.User, error) {
 func (d Database) CheckUserById(id string) (bool, error) {
 	var count int
 	query := `SELECT COUNT(1) FROM users WHERE user_id = $1 AND deleted_at IS NULL`
-	
 	if err := d.db.QueryRow(query, id).Scan(&count); err != nil {
 		fmt.Println(err)
 		return false, err
@@ -60,6 +59,38 @@ func (d Database) CheckUserById(id string) (bool, error) {
 	if count == 0 {
 		return true, nil
 	}
+	return false, nil
+}
 
-	return  false, nil
+func (d Database) NewWallet(w models.NewWallet) (*models.Wallet, error) {
+	isIden, err := d.isUserIdentified(w.UserId)
+	if err != nil {
+		return nil, err
+	}
+
+	query := `INSERT INTO wallets (wallet_id, user_id, is_detected, created_at)
+	VALUES ($1, $2, $3, $4)`
+
+	err = d.db.QueryRow(
+		query,
+		w.WalletId,
+		w.UserId,
+		isIden,
+		time.Now().UTC().Format("2006-01-02 15:04:05"),
+	).Err()
+	if err != nil {
+		return nil, err
+	}
+
+	return &models.Wallet{Id: w.WalletId, Balance: 0}, nil
+}
+
+func (d Database) isUserIdentified(id string) (bool, error) {
+	query := `SELECT is_detected FROM users WHERE user_id = $1`
+	var isUserIdentified bool
+
+	if err := d.db.QueryRow(query, id).Scan(&isUserIdentified); err != nil {
+		return false, err
+	}
+	return isUserIdentified, nil
 }

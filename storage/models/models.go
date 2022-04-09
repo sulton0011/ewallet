@@ -8,6 +8,15 @@ type User struct {
 	Phone     string `json:"phone_number"`
 }
 
+type NewWallet struct {
+	UserId   string `json:"user_id"`
+	WalletId string `json:"wallet_id"`
+}
+
+type Wallet struct {
+	Id      string  `json:"id"`
+	Balance float64 `json:"balance"`
+}
 type Err struct {
 	Error string `json:"error"`
 }

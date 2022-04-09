@@ -1,0 +1,93 @@
+definitions:
+  models.Err:
+    properties:
+      error:
+        type: string
+    type: object
+  models.NewWallet:
+    properties:
+      user_id:
+        type: string
+      wallet_id:
+        type: string
+    type: object
+  models.User:
+    properties:
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: string
+      last_name:
+        type: string
+      phone_number:
+        type: string
+    type: object
+  models.Wallet:
+    properties:
+      balance:
+        type: number
+      id:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /user/new:
+    post:
+      consumes:
+      - application/json
+      description: здесь вы можете создать нового пользователя
+      parameters:
+      - description: новый пользователь
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      summary: New User
+  /wallet/new:
+    post:
+      consumes:
+      - application/json
+      description: здесь вы можете создать нового кошелек
+      parameters:
+      - description: новый кошелек
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.NewWallet'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Wallet'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      summary: New Wallet
+swagger: "2.0"
