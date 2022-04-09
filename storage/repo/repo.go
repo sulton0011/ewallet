@@ -8,4 +8,5 @@ type Repo interface {
 	NewWallet(w models.NewWallet) (*models.Wallet, error)
 	WalletCheckExists(w models.Wallet) (*models.Wallet, error)
 	WalletCheckBalance(w models.Wallet) (*models.Wallet, error)
+	WalletFill(w models.WalletFill) (*models.Wallet, error)
 }

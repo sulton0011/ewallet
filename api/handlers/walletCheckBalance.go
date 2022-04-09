@@ -8,7 +8,7 @@ import (
 )
 
 // @Summary Wallet Check Balance
-// Description Вы можете узнать. Ваше чоте сколько осталось балансе
+// @Description Вы можете узнать. Ваше чоте сколько осталось балансе
 // @Security Digest
 // @Accept json
 // @Produce json

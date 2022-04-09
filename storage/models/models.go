@@ -17,6 +17,13 @@ type Wallet struct {
 	Id      string  `json:"id"`
 	Balance float64 `json:"balance"`
 }
+
+type WalletFill struct {
+	Id     string  `json:"id"`
+	UserId string  `json:"user_id"`
+	Amount float64 `json:"amount"`
+}
+
 type Err struct {
 	Error string `json:"error"`
 }

@@ -11,7 +11,7 @@ func WriteError(w http.ResponseWriter, msg string, code int, err error) {
 	body := models.Err{
 		Error: msg,
 	}
-	if err != nil {
+	if err != nil && err.Error() !=  "you are not identified user, so your limit is 10 000" && err.Error() != "your limit is 100 000"{
 		fmt.Println(err)
 	}
 

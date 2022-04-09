@@ -31,6 +31,15 @@ definitions:
       id:
         type: string
     type: object
+  models.WalletFill:
+    properties:
+      amount:
+        type: number
+      id:
+        type: string
+      user_id:
+        type: string
+    type: object
 info:
   contact: {}
 paths:
@@ -96,6 +105,7 @@ paths:
     post:
       consumes:
       - application/json
+      description: Вы можете узнать. Ваше чоте сколько осталось балансе
       parameters:
       - description: wallet check balance
         in: body
@@ -121,6 +131,36 @@ paths:
       security:
       - Digest: []
       summary: Wallet Check Balance
+  /wallet/fill:
+    post:
+      consumes:
+      - application/json
+      description: По этой конечной точке вы можете заполнить или пополнить свой кошелек
+      parameters:
+      - description: fill wallet
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.WalletFill'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Wallet'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      security:
+      - Digest: []
+      summary: Wallet Fill
   /wallet/new:
     post:
       consumes:

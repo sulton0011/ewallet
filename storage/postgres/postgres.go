@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -124,4 +125,60 @@ func (d Database) WalletCheckBalance(w models.Wallet) (*models.Wallet, error) {
 	}
 
 	return &w, nil
+}
+
+// Этот метод используется для заполнения кошелька
+func (d Database) WalletFill(w models.WalletFill) (*models.Wallet, error) {
+	isIden, err := d.isUserIdentified(w.UserId)
+	if err != nil {
+		return nil, err
+	}
+
+	wallet, err := d.WalletCheckBalance(models.Wallet{Id: w.Id})
+	if err != nil {
+		return nil, err
+	}
+
+	sumBalance := wallet.Balance + w.Amount
+
+	if !isIden {
+		if sumBalance > 10000 {
+			return nil, fmt.Errorf("you are not identified user, so your limit is 10 000")
+		}
+	}
+
+	if sumBalance > 100000 {
+		return nil, fmt.Errorf("your limit is 100 000")
+	}
+
+	tx, err := d.db.Begin()
+	if err != nil {
+		return nil, err
+	}
+
+	now := time.Now().UTC().Format("2006-01-02 15:04:05")
+
+	query := `UPDATE wallets SET balance = balance + $2, updated_at = $3 
+		WHERE wallet_id = $1 AND deleted_at IS NULL`
+
+	_, err = tx.Exec(query, w.Id, w.Amount, now)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	query = `INSERT INTO wallets_incomes (history_id, wallet_id, amount, created_at)
+		VALUES ($1, $2, $3, $4)`
+
+	_, err = tx.Exec(query, uuid.New().String(), w.Id, w.Amount, now)
+	if err != nil {
+		tx.Rollback()
+		return nil, err
+	}
+
+	if err = tx.Commit(); err != nil {
+		return nil, err
+	}
+
+	return d.WalletCheckBalance(models.Wallet{Id: w.Id})
 }

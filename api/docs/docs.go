@@ -121,6 +121,7 @@ var doc = `{
                         "Digest": []
                     }
                 ],
+                "description": "Вы можете узнать. Ваше чоте сколько осталось балансе",
                 "consumes": [
                     "application/json"
                 ],
@@ -136,6 +137,54 @@ var doc = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/models.Wallet"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Wallet"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    }
+                }
+            }
+        },
+        "/wallet/fill": {
+            "post": {
+                "security": [
+                    {
+                        "Digest": []
+                    }
+                ],
+                "description": "По этой конечной точке вы можете заполнить или пополнить свой кошелек",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Wallet Fill",
+                "parameters": [
+                    {
+                        "description": "fill wallet",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.WalletFill"
                         }
                     }
                 ],
@@ -252,6 +301,20 @@ var doc = `{
                     "type": "number"
                 },
                 "id": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.WalletFill": {
+            "type": "object",
+            "properties": {
+                "amount": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "user_id": {
                     "type": "string"
                 }
             }
