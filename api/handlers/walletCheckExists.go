@@ -7,6 +7,16 @@ import (
 	"net/http"
 )
 
+// @Summary Check Wallet Existanse
+// @Description Вы можете узнать что есть или нет кашелек
+// @Security Digest
+// @Accept json
+// @Produce json
+// @Param body body models.Wallet true "wallet check existance"
+// @Success 200 {object} models.Wallet
+// @Failure 401 {object} models.Err
+// @Failure 500 {object} models.Err
+// @Router /check/wallet/exist [post]
 func (h Handlers) WalletCheckExists(w http.ResponseWriter, r *http.Request) {
 	wallet := models.Wallet{}
 

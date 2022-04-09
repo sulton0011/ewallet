@@ -34,6 +34,36 @@ definitions:
 info:
   contact: {}
 paths:
+  /check/wallet/exist:
+    post:
+      consumes:
+      - application/json
+      description: Вы можете узнать что есть или нет кашелек
+      parameters:
+      - description: wallet check existance
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Wallet'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Wallet'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      security:
+      - Digest: []
+      summary: Check Wallet Existanse
   /user/new:
     post:
       consumes:
@@ -62,6 +92,35 @@ paths:
           schema:
             $ref: '#/definitions/models.Err'
       summary: New User
+  /wallet/balance:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: wallet check balance
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Wallet'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Wallet'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      security:
+      - Digest: []
+      summary: Wallet Check Balance
   /wallet/new:
     post:
       consumes:

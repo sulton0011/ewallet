@@ -21,4 +21,6 @@ func New(options Options) {
 	http.HandleFunc("/wallet/new", handler.NewWallet)
 
 	http.HandleFunc("/wallet/check/exist", handler.WalletCheckExists)
+	http.HandleFunc("/wallet/check/balance", handler.WalletCheckBalance)
+
 }
