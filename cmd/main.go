@@ -5,33 +5,34 @@ import (
 	"ewallet/config"
 	"ewallet/storage"
 	"fmt"
+	"log"
+	"net/http"
 
 	"github.com/jmoiron/sqlx"
+	_ "github.com/lib/pq" //postgres drivers
 )
 
 func main() {
 	cfg := config.LoadCfg()
-	psqlCred := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
+	psqlString := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
 		cfg.PostgresHost,
 		cfg.PostgresPort,
 		cfg.PostgresUser,
 		cfg.PostgresPass,
-		cfg.PostgresDB,
-	)
+		cfg.PostgresDB)
 
-	connPsql, err := sqlx.Connect("postgres", psqlCred)
+	fmt.Println(psqlString)
+	connPsql, err := sqlx.Connect("postgres", psqlString)
 	if err != nil {
 		panic(err)
 	}
 
 	repo := storage.NewStorage(connPsql).Storage()
 
-	server := api.New(api.Options{
-		Cfg: cfg,
+	api.New(api.Options{
+		Cfg:  cfg,
 		Repo: repo,
 	})
 
-	if err = server.Run(cfg.Port); err != nil {
-		panic(err)
-	}
+	log.Fatal(http.ListenAndServe(cfg.Port, nil))
 }

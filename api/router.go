@@ -4,21 +4,16 @@ import (
 	"ewallet/api/handlers"
 	"ewallet/config"
 	"ewallet/storage/repo"
-
-	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type Options struct {
-	Cfg config.Config
+	Cfg  config.Config
 	Repo repo.Repo
 }
 
-func New(options Options) *gin.Engine {
-	router := gin.New()
+func New(options Options) {
+	handler := handlers.NewHandler(options.Cfg, options.Repo)
 
-	router.Use(gin.Logger())
-	
-	handlers.NewHandler(options.Cfg, options.Repo)
-
-	return router
+	http.HandleFunc("/", handler.HomePage)
 }
