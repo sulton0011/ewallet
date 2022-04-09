@@ -6,6 +6,6 @@ CREATE TABLE IF NOT EXISTS users (
     phone VARCHAR(24) UNIQUE,
     is_detected BOOLEAN DEFAULT false,
     created_at TIMESTAMP NOT NULL,
-    deleted_at TIMESTAMP DEFAULT NULL,
-    updated_at TIMESTAMP DEFAULT NULL
+    updated_at TIMESTAMP DEFAULT NULL,
+    deleted_at TIMESTAMP DEFAULT NULL
 )

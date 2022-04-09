@@ -2,6 +2,7 @@ package main
 
 import (
 	"ewallet/api"
+	"ewallet/api/auth"
 	"ewallet/config"
 	"ewallet/storage"
 	"fmt"
@@ -32,6 +33,7 @@ func main() {
 	api.New(api.Options{
 		Cfg:  cfg,
 		Repo: repo,
+		Auth: auth.Auth{Cfg: cfg, Repo: repo},
 	})
 
 	log.Fatal(http.ListenAndServe(cfg.Port, nil))

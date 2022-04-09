@@ -1,25 +1,21 @@
 package handlers
 
 import (
+	"ewallet/api/auth"
 	"ewallet/config"
 	"ewallet/storage/repo"
-	"fmt"
-	"net/http"
 )
 
 type Handlers struct {
 	cfg  config.Config
 	repo repo.Repo
+	auth auth.Auth
 }
 
-func NewHandler(cfg config.Config, repo repo.Repo) *Handlers {
+func NewHandler(cfg config.Config, repo repo.Repo, auth auth.Auth) *Handlers {
 	return &Handlers{
 		cfg:  cfg,
 		repo: repo,
+		auth: auth,
 	}
-}
-
-func (h Handlers) HomePage(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Welcome to the HomePage!")
-	fmt.Println(r, "Endpoint Hit: homePage")
 }

@@ -7,3 +7,7 @@ type User struct {
 	Email     string `json:"email"`
 	Phone     string `json:"phone_number"`
 }
+
+type Err struct {
+	Error string `json:"error"`
+}
