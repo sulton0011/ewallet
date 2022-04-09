@@ -62,6 +62,7 @@ func (d Database) CheckUserById(id string) (bool, error) {
 	return false, nil
 }
 
+// Этот метод создает новый кошелек
 func (d Database) NewWallet(w models.NewWallet) (*models.Wallet, error) {
 	isIden, err := d.isUserIdentified(w.UserId)
 	if err != nil {
@@ -85,6 +86,7 @@ func (d Database) NewWallet(w models.NewWallet) (*models.Wallet, error) {
 	return &models.Wallet{Id: w.WalletId, Balance: 0}, nil
 }
 
+// Этот метод проверяет, идентифицирован ли пользователь или нет
 func (d Database) isUserIdentified(id string) (bool, error) {
 	query := `SELECT is_detected FROM users WHERE user_id = $1`
 	var isUserIdentified bool
@@ -93,4 +95,33 @@ func (d Database) isUserIdentified(id string) (bool, error) {
 		return false, err
 	}
 	return isUserIdentified, nil
+}
+
+// Этот метод проверяет, существует ли кошелек или нет, если нет, он возвращает ошибку и кошелек с нулевыми полями
+func (d Database) WalletCheckExists(w models.Wallet) (*models.Wallet, error) {
+	var count int
+	query := `SELECT COUNT(*) FROM wallets WHERE wallet_id = $1 AND deleted_at IS NULL`
+
+	err := d.db.QueryRow(query, w.Id).Scan(&count)
+	if err != nil {
+		return nil, err
+	}
+
+	if count != 1 {
+		return &models.Wallet{Id: "", Balance: 0}, err
+	}
+
+	return d.WalletCheckBalance(w)
+}
+
+// Этот метод возвращает баланс кошелька
+func (d Database) WalletCheckBalance(w models.Wallet) (*models.Wallet, error) {
+	query := `SELECT balance FROM wallets WHERE wallet_id = $1 AND deleted_at IS NULL`
+
+	err := d.db.QueryRow(query, w.Id).Scan(&w.Balance)
+	if err != nil {
+		return nil, err
+	}
+
+	return &w, nil
 }
