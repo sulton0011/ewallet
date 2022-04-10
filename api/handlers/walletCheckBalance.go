@@ -20,13 +20,13 @@ import (
 func (h Handlers) WalletCheckBalance(w http.ResponseWriter, r *http.Request) {
 	wallet := models.Wallet{}
 
-	walletBate, err := io.ReadAll(r.Body)
+	walletByte, err := io.ReadAll(r.Body)
 	if err != nil {
 		WriteError(w, "412 PAGE NOT FAUND", http.StatusNotFound, err)
 		return
 	}
 
-	err = json.Unmarshal(walletBate, &wallet)
+	err = json.Unmarshal(walletByte, &wallet)
 	if err != nil {
 		WriteError(w, "error while binding json", http.StatusBadRequest, err)
 		return
@@ -38,15 +38,15 @@ func (h Handlers) WalletCheckBalance(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	walletBate, err = json.Marshal(walletCheck)
+	walletByte, err = json.Marshal(walletCheck)
 	if err != nil {
 		WriteError(w, "something went wrong, please try agan", http.StatusInternalServerError, err)
 		return
 	}
 
-	bodyHex := h.auth.HashBody(walletBate)
+	bodyHex := h.auth.HashBody(walletByte)
 	r.Header.Set("X-Digest", bodyHex)
 
 	w.Header().Set("Content-Type", "application/json")
-	w.Write(walletBate)
+	w.Write(walletByte)
 }

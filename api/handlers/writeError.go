@@ -29,9 +29,9 @@ func WriteMessage(w http.ResponseWriter, msg string) {
 
 	body := message{Message: msg}
 
-	bytes, _ := json.Marshal(body)
+	errByte, _ := json.Marshal(body)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
-	w.Write(bytes)
+	w.Write(errByte)
 }

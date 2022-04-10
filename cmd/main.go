@@ -22,7 +22,7 @@ func main() {
 		cfg.PostgresPass,
 		cfg.PostgresDB)
 
-	fmt.Println(psqlString)
+	fmt.Println("port:", cfg.Port)
 	connPsql, err := sqlx.Connect("postgres", psqlString)
 	if err != nil {
 		panic(err)
