@@ -6,16 +6,19 @@ import (
 	"ewallet/config"
 	"ewallet/storage/repo"
 	"net/http"
+
+	"github.com/go-redis/redis/v8"
 )
 
 type Options struct {
-	Cfg  config.Config
-	Repo repo.Repo
-	Auth auth.Auth
+	Cfg   config.Config
+	Repo  repo.Repo
+	Auth  auth.Auth
+	Redis *redis.Client
 }
 
 func New(options Options) {
-	handler := handlers.NewHandler(options.Cfg, options.Repo, options.Auth)
+	handler := handlers.NewHandler(options.Cfg, options.Repo, options.Auth, options.Redis)
 
 	http.HandleFunc("/user/new", handler.AddUser)
 	http.HandleFunc("/wallet/new", handler.NewWallet)

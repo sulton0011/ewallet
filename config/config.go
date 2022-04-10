@@ -31,6 +31,8 @@ func LoadCfg() Config {
 	cfg.RedisHost = cast.ToString(getOrReturnDefault("REDIS_HOST", "localhost"))
 	cfg.RedisPort = cast.ToInt(getOrReturnDefault("REDIS_PORT", 6379))
 
+	cfg.SecretKey = []byte(getOrReturnDefault("SECRET_KEY", "secret").(string))
+
 	return cfg
 }
 

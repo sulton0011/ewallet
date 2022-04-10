@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/go-redis/redis/v8"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq" //postgres drivers
 )
@@ -30,10 +31,17 @@ func main() {
 
 	repo := storage.NewStorage(connPsql).Storage()
 
+	redis := redis.NewClient(&redis.Options{
+		Addr:     fmt.Sprintf("%s:%d", cfg.RedisHost, cfg.RedisPort),
+		DB:       0,
+		Password: "",
+	})
+
 	api.New(api.Options{
-		Cfg:  cfg,
-		Repo: repo,
-		Auth: auth.Auth{Cfg: cfg, Repo: repo},
+		Cfg:   cfg,
+		Repo:  repo,
+		Auth:  auth.Auth{Cfg: cfg, Repo: repo},
+		Redis: redis,
 	})
 
 	log.Fatal(http.ListenAndServe(cfg.Port, nil))
