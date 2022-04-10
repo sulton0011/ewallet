@@ -194,7 +194,7 @@ func (d Database) WalletReduce(w models.WalletFill) (*models.Wallet, error) {
 	if err != nil {
 		return nil, err
 	}
-	
+
 	tx, err := d.db.Begin()
 	if err != nil {
 		return nil, err
@@ -204,7 +204,7 @@ func (d Database) WalletReduce(w models.WalletFill) (*models.Wallet, error) {
 
 	query := `UPDATE wallets SET balance = balance - $2, updated_at = $3
 		WHERE wallet_id = $1 AND deleted_at IS NULL`
-	
+
 	_, err = tx.Exec(query, w.Id, w.Amount, now)
 	if err != nil {
 		tx.Rollback()
@@ -242,4 +242,54 @@ func (d Database) isCheckUserInWallets(user_id string, wallet_id string) (bool, 
 	}
 
 	return true, nil
+}
+
+// // Этот метод возвращает общее количество транзакций, а также общие расходы и общий доход за текущий месяц
+func (d Database) WalletHistory(w models.Wallet) (*models.WalletHistory, error) {
+	var (
+		walletHistory = models.WalletHistory{}
+		now           = time.Now().Month()
+	)
+	var queryIncome = `SELECT balance, SUM(wi.amount), COUNT(wi.amount)
+		FROM wallets w 
+		JOIN wallets_incomes wi USING(wallet_id)
+		where 
+		wallet_id = $1 
+		and 
+		extract(month from wi.created_at) = $2
+		group by wallet_id;
+	`
+
+	month := int(now)
+	
+	err := d.db.QueryRow(queryIncome, w.Id, month).Scan(
+		&walletHistory.CurrentBalance,
+		&walletHistory.TotalIncome,
+		&walletHistory.TotalIncomeOperations,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	var queryExpense = `SELECT SUM(we.amount), COUNT(we.amount)
+		FROM wallets w 
+		JOIN wallets_expenses we USING(wallet_id)
+		where 
+		wallet_id = $1 
+		and 
+		extract(month from we.created_at) = $2
+		group by wallet_id;
+	`
+	err = d.db.QueryRow(queryExpense, w.Id, month).Scan(
+		&walletHistory.TotalExpense,
+		&walletHistory.TotalExpenseOperations,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	walletHistory.Id = w.Id
+	walletHistory.TotalOperations = walletHistory.TotalExpenseOperations + walletHistory.TotalIncomeOperations
+	
+	return &walletHistory, nil
 }

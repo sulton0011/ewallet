@@ -24,6 +24,16 @@ type WalletFill struct {
 	Amount float64 `json:"amount"`
 }
 
+type WalletHistory struct {
+	Id                     string `json:"id"`
+	CurrentBalance         float64 `json:"current_balance"`
+	TotalIncome            float64 `json:"total_income"`
+	TotalExpense           float64 `json:"total_expense"`
+	TotalIncomeOperations  int64  `json:"total_income_operations"`
+	TotalExpenseOperations int64  `json:"tatal_expense_operations"`
+	TotalOperations        int64  `json:"total_operations"`
+}
+
 type Err struct {
 	Error string `json:"error"`
 }

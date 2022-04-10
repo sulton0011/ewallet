@@ -40,6 +40,23 @@ definitions:
       user_id:
         type: string
     type: object
+  models.WalletHistory:
+    properties:
+      current_balance:
+        type: number
+      id:
+        type: string
+      tatal_expense_operations:
+        type: integer
+      total_expense:
+        type: number
+      total_income:
+        type: number
+      total_income_operations:
+        type: integer
+      total_operations:
+        type: integer
+    type: object
 info:
   contact: {}
 paths:
@@ -161,6 +178,35 @@ paths:
       security:
       - Digest: []
       summary: Wallet Reduce
+  /wallet/history:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: wallet history
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/models.Wallet'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.WalletHistory'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/models.Err'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/models.Err'
+      security:
+      - Digest: []
+      summary: Get Wallet history
   /wallet/new:
     post:
       consumes:

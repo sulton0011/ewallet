@@ -10,4 +10,5 @@ type Repo interface {
 	WalletCheckBalance(w models.Wallet) (*models.Wallet, error)
 	WalletFill(w models.WalletFill) (*models.Wallet, error)
 	WalletReduce(w models.WalletFill) (*models.Wallet, error)
+	WalletHistory(w models.Wallet) (*models.WalletHistory, error)
 }

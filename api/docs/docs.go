@@ -210,6 +210,53 @@ var doc = `{
                 }
             }
         },
+        "/wallet/history": {
+            "post": {
+                "security": [
+                    {
+                        "Digest": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get Wallet history",
+                "parameters": [
+                    {
+                        "description": "wallet history",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Wallet"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.WalletHistory"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/models.Err"
+                        }
+                    }
+                }
+            }
+        },
         "/wallet/new": {
             "post": {
                 "description": "здесь вы можете создать нового кошелек",
@@ -316,6 +363,32 @@ var doc = `{
                 },
                 "user_id": {
                     "type": "string"
+                }
+            }
+        },
+        "models.WalletHistory": {
+            "type": "object",
+            "properties": {
+                "current_balance": {
+                    "type": "number"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "tatal_expense_operations": {
+                    "type": "integer"
+                },
+                "total_expense": {
+                    "type": "number"
+                },
+                "total_income": {
+                    "type": "number"
+                },
+                "total_income_operations": {
+                    "type": "integer"
+                },
+                "total_operations": {
+                    "type": "integer"
                 }
             }
         }
