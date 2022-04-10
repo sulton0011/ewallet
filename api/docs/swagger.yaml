@@ -135,7 +135,7 @@ paths:
     post:
       consumes:
       - application/json
-      description: По этой конечной точке вы можете заполнить или пополнить свой кошелек
+      description: По этой конечной точке для уменьшения кошелька
       parameters:
       - description: fill wallet
         in: body
@@ -160,7 +160,7 @@ paths:
             $ref: '#/definitions/models.Err'
       security:
       - Digest: []
-      summary: Wallet Fill
+      summary: Wallet Reduce
   /wallet/new:
     post:
       consumes:

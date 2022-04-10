@@ -169,14 +169,14 @@ var doc = `{
                         "Digest": []
                     }
                 ],
-                "description": "По этой конечной точке вы можете заполнить или пополнить свой кошелек",
+                "description": "По этой конечной точке для уменьшения кошелька",
                 "consumes": [
                     "application/json"
                 ],
                 "produces": [
                     "application/json"
                 ],
-                "summary": "Wallet Fill",
+                "summary": "Wallet Reduce",
                 "parameters": [
                     {
                         "description": "fill wallet",
